@@ -21,7 +21,7 @@
 ----------------------------------------------------------------
 ## 謝辞
 * SHIORIにYAYAを使用させていただいています。
-    http://ms.shillest.net/yayalilith.xhtml
+    http://ms.shillest.net/yaya.xhtml
 
 * テンプレート辞書に「はろーYAYAわーるど」を使用させていただいています。
     http://ms.shillest.net/yayame.xhtml
