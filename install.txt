@@ -1,0 +1,4 @@
+charset,UTF-8
+type,ghost
+name,うにゅうのお弁当箱
+directory,lnx_unyu_lunchbox

@@ -1,0 +1,286 @@
+//******************************************************************************
+// YAYA　ゴーストテンプレート
+// メニュー処理辞書
+//******************************************************************************
+
+//******************************************************************************
+//メインメニューの展開
+//
+//AYATEMPLATE.MenuItemの使い方
+//1つめの文字列＝選択肢に表示する文字列
+//2つめの文字列＝選んだときに実行される関数名
+//3つめの文字列＝改行する量　50%刻み　省略すると100%（＝\n）
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+//メインメニュー展開
+//------------------------------------------------------------------------------
+OnMenu
+{
+	InputProcessing = ''
+
+	if STRLEN( reference[0] ) > 0 {
+		MenuItemState = reference[0]
+	}
+
+	'\1\s[10]\0\s[0]\_q\n[150]'
+	--
+	if MenuItemState == 'ButtonSound' {
+		'◆射出音　'
+		--
+		'\__q[OnMenu,LunchFood]◇おかず\__q　'
+		--
+		'\__q[OnMenu,LunchGhost]◇ゴースト\__q\n[150]'
+		--
+		Menu_ButtonSound
+	}
+	elseif MenuItemState == 'LunchFood' {
+		'\__q[OnMenu,ButtonSound]◇射出音\__q　'
+		--
+		'◆おかず　'
+		--
+		'\__q[OnMenu,LunchGhost]◇ゴースト\__q\n[150]'
+		--
+		Menu_LunchFood
+	}
+	elseif MenuItemState == 'LunchGhost' {
+		'\__q[OnMenu,ButtonSound]◇射出音\__q　'
+		--
+		'\__q[OnMenu,LunchFood]◇おかず\__q　'
+		--
+		'◆ゴースト\n[150]'
+		--
+		Menu_LunchGhost
+	}
+	else {
+		'\__q[OnMenu,ButtonSound]◇射出音\__q　'
+		--
+		'\__q[OnMenu,LunchFood]◇おかず\__q　'
+		--
+		'\__q[OnMenu,LunchGhost]◇ゴースト\__q'
+	}
+	--
+	'\_l[0,0]\f[align,right]\__q[script:\e][×]\__q\_l[0,0]\_q'
+	--
+	if STRLEN( MenuComment ) > 0 {
+		MenuComment
+		MenuComment = ''
+	}
+	else {
+		Menu_DefaultComment
+	}
+	--
+	'\e'
+}
+
+Menu_DefaultComment
+{
+	'なんや？'
+	'なんや？'
+	'なんや？'
+	'何でも言うてや。'
+	'何でもはできひんが、\w5何でも聴くで。'
+}
+
+
+//******************************************************************************
+//各項目の処理内容
+//******************************************************************************
+
+Menu_ButtonSound
+{
+	if ButtonSound_Enable == 1 {
+		'射出音：\n\_u[0x2611]ＯＮ　　\__q[OnButtonSound_StateToggle]\_u[0x2610]ＯＦＦ\__q\n[150]'
+		--
+		if ButtonSound_Kind == 'random' {
+			'音の種類：\n\_u[0x2611]ランダム　　\__q[OnButtonSound_Select,File]\_u[0x2610]指定\__q'
+		}
+		else {
+			'音の種類：\n\__q[OnButtonSound_Select,Random]\_u[0x2610]ランダム\__q　　\_u[0x2611]指定\n'
+			--
+			_sound = SPLITPATH(ButtonSound_FilePath)
+			_sound = _sound[2] + _sound[3]
+			_sound = SHIORI3FW.EscapeAllTags(_sound)
+			"指定中の音：\n\__q[OnButtonSound_Select,File]%(_sound)\__q"
+		}
+	}
+	else {
+		'射出音：\n\__q[OnButtonSound_StateToggle]\_u[0x2610]ＯＮ\__q　　\_u[0x2611]ＯＦＦ\n[150]'
+	}
+	--
+
+	if STRLEN(MenuComment)<=0 {
+		MenuComment = Menu_ButtonSound_Comment
+	}
+}
+
+Menu_ButtonSound_Comment
+{
+	'音の設定やね。'
+}
+
+OnButtonSound_StateToggle
+{
+	if ButtonSound_Enable == 1 {
+		ButtonSound_Enable = 0
+		MenuComment = '射出時の音をオフにしたで。'
+	}
+	else {
+		ButtonSound_Enable = 1
+		MenuComment = '射出時の音をオンにしたで。'
+	}
+	--
+	"\![raise,OnMenu,ButtonSound]"
+}
+
+OnButtonSound_Select
+{
+	if reference[0] == 'Random' {
+		ButtonSound_Kind = 'random'
+		MenuComment = '音の種類をランダムにしたで。'
+		"\![raise,OnMenu,ButtonSound]"
+	}
+	else {
+		InputProcessing = 'OnButtonSound_Select'
+		'\1\s[10]\0\s[0]'
+		--
+		_path = SPLITPATH(ButtonSound_FilePath)
+		_path = _path[0] + _path[1]
+		"\![open,dialog,open,--title=射出時の音を選んでや～,--dir=%(_path),--filter=音声ファイル|*.wav;*.mp3,--id=OnButtonSound_Set]"
+	}
+}
+
+OnButtonSound_Set
+{
+	if STRLEN(reference[2])>0 && InputProcessing == 'OnButtonSound_Select' {
+		InputProcessing = ''
+		ButtonSound_FilePath = SHIORI3FW.EscapeAllTags(reference[2])
+		ButtonSound_Kind = 'File'
+		MenuComment = '射出時の音を設定したで。'
+		"\![raise,OnMenu,ButtonSound]"
+	}
+}
+
+
+
+Menu_LunchFood
+{
+	if LunchFood_Kind == 'soundonly' {
+		'射出するおかず：\n\_u[0x2611]空砲　　\__q[OnLanchFood_Select,File]\_u[0x2610]指定\__q'
+	}
+	else {
+		'射出するもの：\n\__q[OnLanchFood_Select,SoundOnly]\_u[0x2610]空砲\__q　　\_u[0x2611]指定\n[150]'
+		--
+		_lanch = SPLITPATH(LunchFood_LanchPath)
+		_lanch = _lanch[2] + _lanch[3]
+		_lanch = SHIORI3FW.EscapeAllTags(_lanch)
+		"指定中のおかず：\n\__q[OnLanchFood_Select,File]%(_lanch)\__q"
+	}
+
+	if STRLEN(MenuComment)<=0 {
+		MenuComment = Menu_LunchFood_Comment
+	}
+}
+
+Menu_LunchFood_Comment
+{
+	'射出するおかずの設定やね。'
+}
+
+OnLanchFood_Select
+{
+	if reference[0] == 'SoundOnly' {
+		LunchFood_Kind = 'soundonly'
+		MenuComment = '空砲にしたで。'
+		"\![raise,OnMenu,LunchFood]"
+	}
+	else {
+		InputProcessing = 'OnLanchFood_Select'
+		'\1\s[10]\0\s[0]'
+		--
+		_path = SPLITPATH(LunchFood_LanchPath)
+		_path = _path[0] + _path[1]
+		"\![open,dialog,open,--title=射出するおかずを選んでや～,--dir=%(_path),--filter=ファイル|*.*,--id=OnLanchFood_Set]"
+	}
+}
+
+OnLanchFood_Set
+{
+	if STRLEN(reference[2])>0 {
+		InputProcessing = ''
+		LunchFood_LanchPath = reference[2]
+		LunchFood_Kind = 'File'
+		MenuComment = '射出するおかずを設定したで。'
+		"\![raise,OnMenu,LunchFood]"
+	}
+}
+
+
+//---- キャンセルされた
+Menu_CANCEL
+{
+	ToggleMenu = 0
+
+	'\1\s[10]\0\s[0]'
+	--
+	'キャンセルやね。'
+	'がってんやで。'
+	'承知やで。'
+	'閉じたで。'
+	--
+	'\e'
+}
+
+
+//---- ヘッドライン
+Menu_HEADLINECANCEL
+{
+	//---- キャンセルされた
+	'\1\s[10]\0\s[0]'
+	--
+	'キャンセルやね。'
+	'がってんやで。'
+	'承知やで。'
+	'閉じたで。'
+	--
+	'\e'
+}
+
+
+Menu_LunchGhost
+{
+	if ISVAR( 'isGhostLaunchFromLink' ) == 0 {
+		isGhostLaunchFromLink = 0
+	}
+	--
+	if isGhostLaunchFromLink == 0 {
+		'指定されたゴーストを起動するか：\n\_u[0x2611]しない　　\__q[OnLinkOpen_MenuSetting,1]\_u[0x2610]する\__q'
+	}
+	else {
+		'指定されたゴーストを起動するか：\n\__q[OnLinkOpen_MenuSetting,0]\_u[0x2610]しない\__q　　\_u[0x2611]する'
+	}
+	--
+	if STRLEN( MenuComment )<=0 {
+		MenuComment = Menu_LunchGhost_Comment
+	}
+}
+
+Menu_LunchGhost_Comment
+{
+	'ワイ宛てのリンクが飛んできた時用の設定やで。'
+}
+
+OnLinkOpen_MenuSetting
+{
+	if reference[0] == 1 {
+		isGhostLaunchFromLink = 1
+		MenuComment = 'ほな、起動するで。'
+	}
+	else {
+		isGhostLaunchFromLink = 0
+		MenuComment = 'ほな、やめとくで。'
+	}
+	--
+	'\![raise,OnMenu,LunchGhost]'
+}
+

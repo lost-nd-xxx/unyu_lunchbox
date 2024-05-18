@@ -1,0 +1,216 @@
+//******************************************************************************
+// YAYA　ゴーストテンプレート
+// マウス入力関連辞書
+//******************************************************************************
+
+
+//******************************************************************************
+//マウス処理部
+//
+//以下、実際のトークを記述します。関数名は以下の規則になっています。
+//[種別] + [スコープ] + [部位]
+//種別は、MouseMove, MouseDoubleClick, MouseWheelUp, MouseWheelDown のどれかです。
+//スコープは、\0,\1,といったスコープ番号です。
+//部位は、当たり判定のどの部位かを表します。当たり判定の無い場所でのイベントの場合
+//部位はありません。
+//******************************************************************************
+
+
+//******************************************************************************
+//撫で反応
+//******************************************************************************
+MouseMove0Unyu
+{
+	'\1\s[10]\0\s[0]'
+	--
+	'ごつごつ。'
+	'ごわごわ。'
+	'さすさす。'
+	'さらさら。'
+	'ざらざら。'
+	'しわしわ。'
+	'そよそよ。'
+	'たゆたゆ。'
+	'つるつる。'
+	'てらてら。'
+	'てろてろ。'
+	'ぬめぬめ。'
+	'ぬらぬら。'
+	'ねとねと。'
+	'ぴかぴか。'
+	'ぴこぴこ。'
+	'ふさふさ。'
+	'ふにふに。'
+	'ふよふよ。'
+	'ぷにぷに。'
+	'ぷりぷり。'
+	'べたべた。'
+	'ぺたぺた。'
+	'ほむほむ。'
+	'むにむに。'
+	'もけもけ。'
+	'もこもこ。'
+	'もにもに。'
+	'もふもふ。'
+	'もよもよ。'
+	--
+	'\e'
+}
+
+MouseMove0LunchBox
+{
+	'\1\s[10]\0\s[0]'
+	--
+	'つる～ん。'
+	'すべすべ。'
+	'つやつや。'
+	--
+	'\e'
+}
+
+
+//******************************************************************************
+//つつかれ反応
+//******************************************************************************
+
+//本体側のつつかれ反応
+MouseDoubleClick0Unyu
+{
+	OnMenu
+}
+
+MouseDoubleClick0LunchBox
+{
+	FinalLanchedTime = GETSECCOUNT()
+	'\1\s[10]\0\s[0]'
+	--
+	'つつくな危険。'
+	'爆発したらどうしてくれるんや。'
+	'燃えるで。'
+	--
+	'\e'
+}
+
+OnLunchBoxLanch
+{
+	FinalLanchedTime = GETSECCOUNT()
+	'\1\s[10]\0\s[1]'
+	--
+	if ButtonSound_Enable == 1 {
+		if ButtonSound_Kind == 'random'
+		{
+			"\![sound,stop]\![sound,play,%(効果音_らんだむ)]"
+		}
+		else {
+			_path = '"' + ButtonSound_FilePath + '"'
+			"\![sound,stop]\![sound,play,%(_path)]"
+		}
+	}
+	--
+	if LunchFood_Kind != 'soundonly' {
+		_path = '"' + LunchFood_LanchPath + '"'
+		"\![open,file,%(_path)]"
+	}
+	--
+	'ボタ～ン。\![raiseother,__SYSTEM_ALL_GHOST__,OnLunchBoxLanched]'
+	--
+	'\e'
+}
+
+
+//******************************************************************************
+//シングルクリック反応
+//******************************************************************************
+
+MouseClick0LunchBox
+{
+	if ( GETSECCOUNT() - FinalLanchedTime ) > 1 {
+		OnLunchBoxLanch
+	}
+}
+
+
+効果音_すべて : array
+{
+	効果音_うれしい
+	効果音_こうげき
+	効果音_びよよん
+	効果音_かなしい
+}
+効果音_らんだむ : nonoverlap
+{
+	parallel ( 効果音_うれしい , 効果音_こうげき , 効果音_びよよん , 効果音_かなしい )
+}
+効果音_うれしい : array
+{
+	'sound/1up_1.wav'
+	'sound/1up_2.wav'
+	'sound/1up_3.wav'
+	'sound/1up_4.wav'
+	'sound/1up_5.wav'
+}
+効果音_こうげき : array
+{
+	'sound/boom_1.wav'
+	'sound/boom_2.wav'
+	'sound/boom_3.wav'
+	'sound/boom_4.wav'
+	'sound/boom_5.wav'
+}
+効果音_びよよん : array
+{
+	'sound/jump_1.wav'
+	'sound/jump_2.wav'
+	'sound/jump_3.wav'
+	'sound/jump_4.wav'
+	'sound/jump_5.wav'
+}
+効果音_かなしい : array
+{
+	'sound/lose_1.wav'
+	'sound/lose_2.wav'
+	'sound/lose_3.wav'
+	'sound/lose_4.wav'
+	'sound/lose_5.wav'
+}
+
+//******************************************************************************
+//マウス処理部コア
+//AYATEMPLATE.MouseMoveWheelFuncの2番目の数字が「感度」です。
+//1番目の数字（0か1）は、MoveかWheelかを判別するためのもので、
+//変更の必要はありません。
+//******************************************************************************
+
+OnMouseMove
+{
+	AYATEMPLATE.MouseMoveWheelFunc(0,50,'MouseMove')
+}
+
+OnMouseWheel
+{
+	_result = ''
+	if TOINT(reference[2]) > 0 {
+		_result = AYATEMPLATE.MouseMoveWheelFunc(1,4,'MouseWheelUp')
+	}
+	else {
+		_result = AYATEMPLATE.MouseMoveWheelFunc(1,4,'MouseWheelDown')
+	}
+
+	if _result == '' {
+		_result = AYATEMPLATE.MouseMoveWheelFunc(1,4,'MouseWheel')
+	}
+
+	_result
+}
+
+OnMouseDoubleClick
+{
+	AYATEMPLATE.MouseEventExec('MouseDoubleClick')
+}
+
+OnMouseClick
+{
+	if reference[5] == 0 && ( GETSECCOUNT() - FinalLanchedTime ) > 1 {
+		AYATEMPLATE.MouseEventExec('MouseClick')
+	}
+}
