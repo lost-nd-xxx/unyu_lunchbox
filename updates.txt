@@ -42,7 +42,7 @@ file,ghost/master/yaya.dll56e3af56c88e696cea1f39d53b239cefsize=880640date=201
 file,ghost/master/yaya.txtc720df5cb99a1e84891b871c99a712absize=1993date=2012-12-21T00:00:00
 file,ghost/master/yaya_emerg.txtd9ee78e2068ff80d809325bd4fa8228bsize=1055date=2012-12-21T00:00:00
 file,install.txtc01ecb367ab1113ad0196f48ab68a2a9size=86date=2012-12-21T00:00:00
-file,readme.txtdc879de73a30fd67ed365cbe49da76absize=1522date=2012-12-21T00:00:00
+file,readme.txtef5be934645d34c184df69e79e11c706size=1516date=2012-12-21T00:00:00
 file,shell/master/descript.txt7ed7b2a44f70c54192c797529c542822size=999date=2012-12-21T00:00:00
 file,shell/master/menu_background.pngc877ef4f2a95fed7a1da861c3ac5d10esize=92date=2012-12-21T00:00:00
 file,shell/master/menu_foreground.pngfbbdd585c4174580d6d3b2c7b96ac4ccsize=92date=2012-12-21T00:00:00
