@@ -98,7 +98,6 @@ animation103.pattern36,base,-1,0,0,0
 
 surface1
 {
-//elementが1つもないとエラーが出る
 element0,base,surface1.png,0,0
 
 //1. 切り替わった瞬間にまず刮目の顔を表示
@@ -112,7 +111,6 @@ animation100.pattern3,base,-1,0,0,0
 animation101.interval,never
 animation101.pattern0,base,0,0,0,0
 }
-
 surface7
 {
 //シェル定義用の部品//素の顔
@@ -127,14 +125,46 @@ element0,base,surface1.png,0,0
 surface.append0-8
 {
 collisionex0,LunchBox,circle,165,215,40
-collisionex1,Unyu,rect,0,0,335,328
+collisionex1,UnyuHead,rect,0,0,335,100
+collisionex2,UnyuBody,rect,0,101,335,328
+}
+
+surface20
+{
+element0,base,surface0.png,0,0
+
+//サーフェスが切り替わった瞬間にぼよん
+animation0.interval,runonce
+animation0.pattern0,scaling,7,1,100,100
+animation0.pattern1,scaling,7,1,100,96.5
+animation0.pattern2,scaling,7,1,100,93.2
+animation0.pattern3,scaling,7,1,100,90
+animation0.pattern4,scaling,7,1,100,87.1
+animation0.pattern5,scaling,7,1,100,84.7
+animation0.pattern6,scaling,7,1,100,82.7
+animation0.pattern7,scaling,7,1,100,81.2
+animation0.pattern8,scaling,7,1,100,80.3
+animation0.pattern9,scaling,7,1,100,80
+animation0.pattern10,scaling,7,1,100,80.3
+animation0.pattern11,scaling,7,1,100,81.2
+animation0.pattern12,scaling,7,1,100,82.7
+animation0.pattern13,scaling,7,1,100,84.7
+animation0.pattern14,scaling,7,1,100,87.1
+animation0.pattern15,scaling,7,1,100,90
+animation0.pattern16,scaling,7,1,100,93.2
+animation0.pattern17,scaling,7,1,100,96.5
+animation0.pattern18,scaling,7,1,100,100
+animation0.pattern19,overlay,-1,0,0,0
 }
 
 sakura.cursor
 {
-mouseup0,lunchbox,system:finger
-mousedown0,lunchbox,system:finger
+mouseup0,LunchBox,system:finger
+mousedown0,LunchBox,system:finger
 
-mouseup1,unyu,system:hand
-mousedown1,unyu,system:hand
+mouseup1,UnyuHead,system:hand
+mousedown1,UnyuHead,system:hand
+
+mouseup1,UnyuBody,system:hand
+mousedown1,UnyuBody,system:hand
 }

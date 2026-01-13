@@ -15,8 +15,8 @@ kero.seriko.alignmenttodesktop,free
 sakura.balloon.offsetx,30
 sakura.balloon.offsety,100
 
-kero.balloon.offsetx,0
-kero.balloon.offsety,0
+kero.balloon.offsetx,30
+kero.balloon.offsety,173
 
 menu.background.bitmap.filename,menu_background.png
 menu.foreground.bitmap.filename,menu_foreground.png
