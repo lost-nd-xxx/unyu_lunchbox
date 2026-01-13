@@ -127,7 +127,7 @@ OnButtonSound_StateToggle
 	}
 	else {
 		ButtonSound_Enable = 1
-		MenuComment = '射出時の音をオンにしたで。'
+		MenuComment = '射出時の音をオンにしたで。' + SoundsPreload
 	}
 	--
 	"\![raise,OnMenu,ButtonSound]"
@@ -137,7 +137,7 @@ OnButtonSound_Select
 {
 	if reference[0] == 'Random' {
 		ButtonSound_Kind = 'random'
-		MenuComment = '音の種類をランダムにしたで。'
+		MenuComment = '音の種類をランダムにしたで。' + SoundsPreload
 		"\![raise,OnMenu,ButtonSound]"
 	}
 	else {
@@ -156,7 +156,7 @@ OnButtonSound_Set
 		InputProcessing = ''
 		ButtonSound_FilePath = SHIORI3FW.EscapeAllTags(reference[2])
 		ButtonSound_Kind = 'File'
-		MenuComment = '射出時の音を設定したで。'
+		MenuComment = '射出時の音を設定したで。' + SoundsPreload
 		"\![raise,OnMenu,ButtonSound]"
 	}
 }

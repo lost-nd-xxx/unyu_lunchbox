@@ -30,6 +30,9 @@ OnBoot
 	//---- 起動時間を確認してあいさつを変化
 	_timeslot = GetTimeSlot
 
+  // 必要に応じて音声をプリロード（判定はSoundsPreload関数内で行う）
+  SoundsPreload
+
 	case _timeslot{
 		when '朝'{
 			'おはようさん。'
@@ -136,7 +139,6 @@ OnSystemLoad.DefaultValue
 	if ISVAR('LunchFood_LanchPath') == 0 { LunchFood_LanchPath = _path + 'okazu.txt' }
 }
 
-/*
 SoundsPreload
 {
 	if ButtonSound_Kind == 'random' && ButtonSound_Enable == 1 {
@@ -152,4 +154,3 @@ SoundsPreload
 		'\![sound,load,"' + _sound + '"]'
 	}
 }
-*/
